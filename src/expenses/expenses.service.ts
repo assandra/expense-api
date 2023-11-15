@@ -1,0 +1,29 @@
+import { Injectable, Inject } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { Expense } from './expense.entity.js';
+import { ExpenseDto } from './dto/expense.dto.js';
+import { plainToClass } from '@nestjs/class-transformer';
+
+@Injectable()
+export class ExpensesService {
+
+  constructor(
+    @Inject('EXPENSE_REPOSITORY')
+    private expensesRepository: Repository<Expense>
+  ) { }
+
+  async getAllExpenses(): Promise<ExpenseDto[]> {
+    const expenses = await this.expensesRepository.find();
+    return plainToClass(ExpenseDto, expenses);
+  }
+
+  async getExpensesSummary(): Promise<number> {
+    const val = await this.expensesRepository.createQueryBuilder("expenses").addSelect('SUM(expenses.cost)', 'totalCost').getRawOne()
+    return val.totalCost;
+  }
+
+  async createExpense(expense: ExpenseDto): Promise<void> {
+    expense['cost'] = expense['cost'] * 100;
+    await this.expensesRepository.save(expense);
+  }
+}
