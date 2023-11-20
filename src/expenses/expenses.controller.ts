@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Patch, Body, Param } from '@nestjs/common';
 import { ExpensesService } from './expenses.service.js';
 import { ExpenseDto } from './dto/expense.dto.js';
+import { UpdateExpenseDto } from './dto/updateExpense.dto.js';
 
 @Controller('expenses')
 export class ExpensesController {
@@ -18,7 +19,16 @@ export class ExpensesController {
 
   @Post()
   async createExpense(@Body() expenseDto: ExpenseDto): Promise<void> {
-    console.log('In the controller', expenseDto)
     this.expensesService.createExpense(expenseDto);
+  }
+
+  @Patch(':id')
+  async updateExpense(@Param('id') id: string, @Body() updateExpense: UpdateExpenseDto) {
+    this.expensesService.updateExpense(id, updateExpense);
+  }
+
+  @Delete(':id')
+  async removeExpense(@Param('id') id: string): Promise<void> {
+    this.expensesService.removeExpense(id);
   }
 }
