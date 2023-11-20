@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Expense } from './expense.entity.js';
 import { ExpenseDto } from './dto/expense.dto.js';
 import { plainToClass } from '@nestjs/class-transformer';
+import { UpdateExpenseDto } from './dto/updateExpense.dto.js';
 
 @Injectable()
 export class ExpensesService {
@@ -25,5 +26,13 @@ export class ExpensesService {
   async createExpense(expense: ExpenseDto): Promise<void> {
     expense['cost'] = expense['cost'] * 100;
     await this.expensesRepository.save(expense);
+  }
+
+  async removeExpense(id: string): Promise<void> {
+    await this.expensesRepository.delete(id);
+  }
+
+  async updateExpense(id: string, updateExpense: UpdateExpenseDto): Promise<void> {
+    await this.expensesRepository.update(id, updateExpense)
   }
 }
