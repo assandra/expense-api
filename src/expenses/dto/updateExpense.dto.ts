@@ -3,19 +3,19 @@ import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
 export class UpdateExpenseDto {
-    @Expose()
-    @IsNumber()
-    id: number;
+  @Expose()
+  @IsNumber()
+  id: number;
 
-    @Expose()
-    @IsString()
-    name: string;
+  @Expose()
+  @IsString()
+  name: string;
 
-    @Expose()
-    @IsString()
-    description: string;
+  @Expose()
+  @IsString()
+  description: string;
 
-    @Expose()
-    @IsDecimal()
-    cost: number;
+  @Expose()
+  @IsDecimal()
+  cost: number;
 }
